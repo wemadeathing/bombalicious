@@ -1,4 +1,12 @@
 
+// Import card images so Vite can process them
+import card1 from './assets/bombalicious-card1.jpg';
+import card2 from './assets/bombalicious-card2.jpg';
+import card3 from './assets/bombalicious-card3.jpg';
+import card4 from './assets/bombalicious-card4.jpg';
+import card5 from './assets/bombalicious-card5.jpg';
+import card6 from './assets/bombalicious-card6.jpg';
+
 // Loading Animation
 window.addEventListener('load', function() {
     const loadingSpinner = document.getElementById('loading-spinner');
@@ -180,14 +188,24 @@ document.addEventListener('DOMContentLoaded', function() {
             imageObserver.observe(img);
         });
 
+        // Map of card images
+        const cardImages = {
+            'card1': card1,
+            'card2': card2,
+            'card3': card3,
+            'card4': card4,
+            'card5': card5,
+            'card6': card6
+        };
+
         // Lazy load background images for product cards
         const bgImageObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const element = entry.target;
-                    const bgImage = element.dataset.bgImage;
-                    if (bgImage) {
-                        element.style.backgroundImage = `url('${bgImage}')`;
+                    const cardKey = element.dataset.cardKey;
+                    if (cardKey && cardImages[cardKey]) {
+                        element.style.backgroundImage = `url('${cardImages[cardKey]}')`;
                         element.classList.add('loaded');
                         bgImageObserver.unobserve(element);
                     }
@@ -198,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Observe product images for lazy loading
-        document.querySelectorAll('.product-image[data-bg-image]').forEach(element => {
+        document.querySelectorAll('.product-image[data-card-key]').forEach(element => {
             bgImageObserver.observe(element);
         });
     }
